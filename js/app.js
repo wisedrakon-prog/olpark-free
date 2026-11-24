@@ -220,7 +220,9 @@
 
   function disabledSpacesFor(venue) {
     if (!venue) return null;
-    return OLPARK.disabledParking.filter(function (z) { return z.zone === venue.disabledZone; })[0] || null;
+    return OLPARK.disabledParking.filter(function (z) {
+      return z.zone.indexOf(venue.disabledZone) === 0;
+    })[0] || null;
   }
 
   function renderGuide() {
@@ -494,7 +496,10 @@
     if (has("stroller")) items.push("기저귀·분유 — 만남의광장 수유실은 운영 중지, 대체 수유실 확인");
     if (has("pregnant")) items.push("가까운 진입문·주차장 위치 저장, 휴식 시간 확보");
     if (state.transit === "car") items.push("출차 예정 시간 확인 (" + (venue ? esc(venue.parkingLot) + " " + esc(venue.parkingLotShortHours) : "매표소 07:00~22:00") + ")");
-    if (state.transit === "subway") items.push("하차 역 출구 확인 (" + esc(OLPARK.transit.subway.filter(function (s) { return s.id === state.station; })[0].name) + ")");
+    if (state.transit === "subway") {
+      var st = OLPARK.transit.subway.filter(function (s) { return s.id === state.station; })[0] || OLPARK.transit.subway[0];
+      items.push("하차 역 출구 확인 (" + esc(st.name) + ")");
+    }
     if (pf) items.push("공연 시작 40분 전 도착 · 문의 " + esc(pf.tel));
     if (!OLPARK.weather[state.weather].outdoor) items.push("우산·여분 양말 또는 더위·추위 대비 용품");
 
@@ -583,7 +588,7 @@
       return;
     }
     list.innerHTML = reports.slice().reverse().map(function (r) {
-      var conds = r.conditions.map(function (c) {
+      var conds = (r.conditions || []).map(function (c) {
         var p = OLPARK.personas.filter(function (x) { return x.id === c; })[0];
         return p ? p.short : c;
       });
@@ -653,7 +658,7 @@
   function csvDownload() {
     var head = ["접수시각", "시설", "위치", "불편정도", "제보자조건", "내용", "구분"];
     var rows = reports.map(function (r) {
-      return [r.at, facilityLabel(r.facility), r.place, r.severity, r.conditions.join("/"), (r.memo || "").replace(/\n/g, " "), r.sample ? "예시" : "실제"];
+      return [r.at, facilityLabel(r.facility), r.place, r.severity, (r.conditions || []).join("/"), (r.memo || "").replace(/\n/g, " "), r.sample ? "예시" : "실제"];
     });
     var csv = [head].concat(rows).map(function (row) {
       return row.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(",");
