@@ -38,6 +38,8 @@ body {
   word-break: keep-all;
 }
 
+section[id], div[id="guideResult"], h2[id], h3 { scroll-margin-top: 5.2rem; }
+
 h1, h2, h3 { line-height: 1.32; margin: 0 0 0.5rem; letter-spacing: -0.01em; }
 h2 { font-size: 1.22rem; }
 h3 { font-size: 1.02rem; margin-top: 1.2rem; }
@@ -262,8 +264,8 @@ main { max-width: 880px; margin: 0 auto; padding: 1.1rem 1rem 3rem; }
 
 .chart { display: grid; gap: 0.45rem; margin: 0.5rem 0 1.2rem; }
 .bar-row { display: grid; grid-template-columns: 7.6rem 1fr 3rem; align-items: center; gap: 0.5rem; font-size: 0.92rem; }
-.bar-track { background: #eef3f0; border-radius: 999px; height: 1.5rem; overflow: hidden; }
-.bar-fill { height: 100%; background: linear-gradient(90deg, #157347, #2f9c68); border-radius: 999px; min-width: 2px; }
+.bar-track { display: block; background: #eef3f0; border-radius: 999px; height: 1.5rem; overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #157347, #2f9c68); border-radius: 999px; min-width: 2px; }
 .bar-value { text-align: right; font-weight: 700; color: var(--green-900); }
 
 .formula { font-size: 0.88rem; color: var(--ink-2); background: var(--green-50); border-left: 4px solid var(--green-700); padding: 0.6rem 0.8rem; border-radius: 8px; }
